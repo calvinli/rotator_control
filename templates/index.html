@@ -33,8 +33,8 @@ been disabled. Press the update button to refresh the numbers.
 
 <h2>Set position</h2>
 <form id="set_pos_form">
-    <label>Az: </label><input id="az-input" size=3 name="az"></input>
-    <label>El: </label><input id="el-input" size=3 name="el"></input>
+    <label>Az: </label><input id="az-input" type="number" min="0" max="360" name="az"></input>
+    <label>El: </label><input id="el-input" type="number" min="0" max="180" name="el"></input>
     <input id="set_pos_submit" type=button value="submit" />
     <div id="set_pos_success" class="success_msg"></div>
 </form>
