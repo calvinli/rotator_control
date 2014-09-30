@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>EMEDish Rotator</title>
+<meta charset=utf-8 />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<h1>EMEDish Rotator Control Page</h1>
+<hr />
+<h2>Current position</h2>
+<p>
+For performance reasons, automatic updating of the current position has
+been disabled. Press the update button to refresh the numbers.
+</p>
+<div id="azel">
+    <table id="azel_table">
+        <tr id="azel_num_row">
+            <td class="azel_num" id="azel_nums_az">{{ az }}&deg;</td>
+            <td class="azel_num" id="azel_nums_el">{{ el }}&deg;</td>
+        </tr>
+        <tr id="azel_head_row">
+            <th class="azel_head" id="azel_heads_az">Azimuth</th>
+            <th class="azel_head" id="azel_heads_el">Elevation</th>
+        </tr>
+    </table>
+</div>
+<form id="update_azel_form">
+    <input id="update_azel_submit" type="button" value="update" />
+    <div id="update_azel_success" class="success_msg"></div>
+</form>
+
+<h2>Set position</h2>
+<form id="set_pos_form">
+    <label>Az: </label><input id="az-input" size=3 name="az"></input>
+    <label>El: </label><input id="el-input" size=3 name="el"></input>
+    <input id="set_pos_submit" type=button value="submit" />
+    <div id="set_pos_success" class="success_msg"></div>
+</form>
+
+<h2>Moon</h2>
+<form id="update_moon_form">
+    <input id="update_moon_submit" type="button" value="update" />
+    <div id="update_moon_success" class="success_msg"></div>
+</form>
+<div id="moon_info">
+    <strong>Time:</strong> 
+        <span id="moon_time">{{ moon_info['time'] }}</span> <br />
+    <strong>Azimuth:</strong>
+        <span id="moon_az">{{ moon_info['az'] }}</span> <br />
+    <strong>Elevation:</strong>
+        <span id="moon_el">{{ moon_info['el'] }}</span> <br />
+    <strong>Phase:</strong>
+        <span id="moon_phase">{{ moon_info['phase'] }}</span> <br />
+    <strong>Distance:</strong>
+        <span id="moon_dist">{{ moon_info['dist'] }}</span> km <br />
+</div>
+<form id="set_moon_form">
+    <input id="set_moon_submit" type="button" value="Set rotator to moon" />
+    <div id="set_moon_success" class="success_msg"></div>
+</form>
+
+<script>
+$("#set_moon_submit").click(function() {
+        $("#set_moon_success").html("...");
+        $.ajax({
+            type: 'POST',
+            url: "/api/set_to_moon",
+            })
+        .done(function() {
+            $("#set_moon_success").html("&#10003;");
+            })
+        .fail(function() {
+            $("#set_moon_success").html("Error");
+            });
+        });
+
+$("#set_pos_submit").click(function() {
+        var setPosData = {'az': $("#az-input").val(), 'el': $("#el-input").val()};
+        $("#set_pos_success").html("...");
+        $.ajax({
+            type: 'POST',
+            url: "/api/set_pos",
+            data: setPosData
+            })
+        .done(function() {
+            $("#set_pos_success").html("&#10003;");
+            })
+        .fail(function() {
+            $("#set_pos_success").html("Error");
+            });
+        });
+
+$("#update_azel_submit").click(function() {
+        $("#update_azel_success").html("...");
+        $("#azel_nums_az").html("...&deg;");
+        $("#azel_nums_el").html("...&deg;");
+        $.ajax({
+            type: 'GET',
+            url: "/api/get_pos",
+            })
+        .done(function(data) {
+            var az = data['az'];
+            var el = data['el'];
+            $("#azel_nums_az").html(az+"&deg;");
+            $("#azel_nums_el").html(el+"&deg;");
+
+            $("#update_azel_success").html("&#10003;");
+            })
+        .fail(function(data) {
+            $("#update_azel_success").html("Error");
+            });
+        });
+
+$("#update_moon_submit").click(function() {
+        $("#update_moon_success").html("...");
+        $.ajax({
+            type: 'GET',
+            url: "/api/moon_info",
+            })
+        .done(function(data) {
+            $("#moon_time").text(data['time']);
+            $("#moon_az").text(data['az']);
+            $("#moon_el").text(data['el']);
+            $("#moon_phase").text(data['phase']);
+            $("#moon_dist").text(data['dist']);
+
+            $("#update_moon_success").html("&#10003;");
+            });
+        });
+</script>
+</body>
+</html>

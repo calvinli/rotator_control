@@ -1,0 +1,39 @@
+#azel {
+    margin-bottom: 5px;
+}
+
+#azel_table {
+    text-align: center;
+    font-family: monospace;
+    background: black;
+}
+#azel_num_row {
+    font-size: 36pt;
+    font-weight: bold;
+    color: #00fd00;
+}
+
+#azel_head_row {
+    color: #fff;
+}
+ 
+.azel_num {
+    padding: 10px;
+}
+
+.azel_head {
+    width: 10em;
+}
+
+#moon_info {
+    margin-bottom: 20px;
+}
+
+.success_msg {
+    display: inline;
+}
+
+#update_moon_form {
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
