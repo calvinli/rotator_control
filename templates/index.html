@@ -56,6 +56,10 @@ been disabled. Press the update button to refresh the numbers.
         <span id="moon_phase">{{ moon_info['phase'] }}</span> <br />
     <strong>Distance:</strong>
         <span id="moon_dist">{{ moon_info['dist'] }}</span> km <br />
+    <strong>Rise:</strong>
+        <span id="moon_rise">{{ moon_info['rise'] }}</span> <br />
+    <strong>Set:</strong>
+        <span id="moon_set">{{ moon_info['set'] }}</span> <br />
 </div>
 <form id="set_moon_form">
     <input id="set_moon_submit" type="button" value="Set rotator to moon" />
@@ -126,6 +130,8 @@ $("#update_moon_submit").click(function() {
             $("#moon_el").text(data['el']);
             $("#moon_phase").text(data['phase']);
             $("#moon_dist").text(data['dist']);
+            $("#moon_rise").text(data['rise']);
+            $("#moon_set").text(data['set']);
 
             $("#update_moon_success").html("&#10003;");
             });

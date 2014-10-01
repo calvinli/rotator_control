@@ -66,12 +66,25 @@ def get_moon_params():
     dist = int(moon.earth_distance * 149597870.7)
     phase = round(moon.moon_phase, 3)
 
-    return {"time": time, "az": az, "el": el, "phase": phase, "dist": dist}
+    if el <= 0:
+        rise = emedish.next_rising(ephem.Moon())
+        setting = emedish.previous_setting(ephem.Moon())
+    else:
+        rise = emedish.previous_rising(ephem.Moon())
+        setting = emedish.next_setting(ephem.Moon())
+
+    rise = ephem.localtime(rise).strftime("%Y-%m-%d %H:%M:%S")
+    setting = ephem.localtime(setting).strftime("%Y-%m-%d %H:%M:%S")
+
+    return {"time": time, "az": az, "el": el,
+            "phase": phase, "dist": dist,
+            "rise": rise, "set": setting}
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         p = get_moon_params()
-        print("{} -- Az: {}°, El: {}°, Phase: {}, Distance: {:,} km".format(
+        print("{} -- Az: {}°, El: {}°, Phase: {}, Distance: {:,} km.".format(
                 p['time'], p['az'], p['el'], p['phase'], p['dist']))
+        print("Rise: {}. Set: {}.".format(p['rise'], p['set']))
     else:
         print("{} {}".format(*sanitize_az_el(*get_moon_az_el())))
